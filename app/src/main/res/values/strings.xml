@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Task</string>
     <string name="error_undefined">Division by zero is undefined</string>
+
+    <string name="active_operations">Active Operations</string>
+    <string name="completed_operations">Completed Operations</string>
+    <string name="state">State:</string>
+    <string name="id">UUID:</string>
+
 </resources>
