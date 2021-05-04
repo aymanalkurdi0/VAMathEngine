@@ -1,5 +1,6 @@
 package com.va.task
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var workInfos: LiveData<List<WorkInfo>>? = null
-    private val workManager: WorkManager? = null
+    private val workManager: WorkManager = WorkManager.getInstance(this)
     private lateinit var mBinding: ActivityMainBinding
 
     @Inject
@@ -32,36 +33,21 @@ class MainActivity : AppCompatActivity() {
             intArrayOf(1, 2, 3), Operator.ADDITION, 500
         )
 
-        createAJob(math);
+        createAJob(math)
+        startListener()
 
     }
 
     private fun createAJob(data: MathQuestion) {
 
-        val myConstraints = Constraints.Builder()
-            .setTriggerContentMaxDelay(data.delayTime, TimeUnit.SECONDS)
-            .build()
+        val intent = Intent(this, MathEngineService::class.java)
+        intent.putExtra(Constants.kMathQuestion,data)
 
-        val myData = Data.Builder()
-            .putIntArray(Constants.kList, data.list)
-            .putString(Constants.kOperator, data.operator.name)
-            .build()
-
-        val request = OneTimeWorkRequest.Builder(CalWorker::class.java)
-            .addTag(Constants.kJobsTag)
-            .setConstraints(myConstraints)
-            .setInputData(myData)
-            .build()
-
-
-        val workManager = WorkManager.getInstance(this)
-        workManager.enqueue(request)
-
-        startListener(workManager)
+        MathEngineService.enqueueWork(this, intent)
     }
 
-    private fun startListener(workManager: WorkManager) {
-        workInfos = workManager
+    private fun startListener() {
+        workInfos = WorkManager.getInstance(this)
             .getWorkInfosLiveData(WorkQuery.Builder.fromTags(listOf(Constants.kJobsTag)).build())
         workInfos?.observe(this) {
             Log.d(this.javaClass.name, "observed: ")
