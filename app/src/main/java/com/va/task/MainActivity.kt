@@ -2,8 +2,6 @@ package com.va.task
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
@@ -13,7 +11,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private var input: String?=null
+    private var inputs: ArrayList<String> = arrayListOf()
     private lateinit var mBinding: ActivityMainBinding
 
     @Inject
@@ -22,30 +20,22 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var completedJobsAdapter: ActiveJobsAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
-
-        mBinding.etNumbers.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                input = s?.replace(Regex("\\s+|,+"), "*")?.trimStart { c ->c.equals("\\s+|,+")}
-
-                mBinding.tvFun.text = input.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-
+        mBinding.btnAdd.setOnClickListener {
+            inputs.add(mBinding.etNumbers.text.toString())
+            mBinding.etNumbers.text.clear()
+            updateFun()
         }
 
-        )
+        mBinding.btnClear.setOnClickListener {
+            mBinding.etNumbers.text.clear()
+            mBinding.tvFun.text = ""
+            inputs.clear()
+        }
+
         mBinding.rvActiveJobs.adapter = activeJobsAdapter
 
         mBinding.rvCompletedJobs.adapter = completedJobsAdapter
@@ -55,6 +45,19 @@ class MainActivity : AppCompatActivity() {
         )
 
         createAJob(math)
+
+    }
+
+    private fun updateFun() {
+        val string = StringBuilder()
+
+        inputs.forEachIndexed { index, s ->
+            if (index != 0)
+                string.append(" / ")
+            string.append(s)
+
+        }
+        mBinding.tvFun.text = string
 
     }
 
