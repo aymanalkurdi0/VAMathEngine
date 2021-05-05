@@ -163,8 +163,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Constants.kMathQuestion, data)
 
         MathEngineService.enqueueWork(this, intent)
-
-        MathEngineService.enqueueWork(this, intent)
     }
 
     override fun onStop() {
