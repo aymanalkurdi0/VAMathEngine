@@ -20,7 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
-
+// TODO: 5/5/2021 Documentation and reformat methods names
 @RunWith(AndroidJUnit4::class)
 class MathEngineServiceTest {
 
@@ -44,7 +44,6 @@ class MathEngineServiceTest {
     @Test
     @Throws(Exception::class)
     fun testMathEngineService() {
-        // Define input data
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
@@ -53,7 +52,6 @@ class MathEngineServiceTest {
             val bean = MathQuestion(
                 intArrayOf(1, 2, 3), Operator.ADDITION, 0
             )
-            // Data can be passed to the service via the Intent.
             putExtra(Constants.kMathQuestion, bean)
         }
         MathEngineService.enqueueWork(ApplicationProvider.getApplicationContext(), intent)
@@ -66,7 +64,6 @@ class MathEngineServiceTest {
 
         val outputData = workInfo.outputData
 
-        // Create expected result
         val output = Data.Builder()
             .putDouble(Constants.kResult, 6.0)
             .build()

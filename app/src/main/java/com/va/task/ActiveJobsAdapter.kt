@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkInfo
 import com.va.task.databinding.ItemActiveJobBinding
 import javax.inject.Inject
-
+// TODO: 5/5/2021 Documentation
 class ActiveJobsAdapter @Inject constructor() :
     RecyclerView.Adapter<ActiveJobsAdapter.ViewHolder>() {
 

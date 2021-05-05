@@ -21,9 +21,6 @@ class CalWorker(private val appContext: Context, workerParams: WorkerParameters)
         // Create MathQuestion object for executing action
         val mathQuestion = MathQuestion(list, Operator.valueOf(operator))
 
-
-//        Thread.sleep(1_0000)
-
         try {
 
             // Execute action

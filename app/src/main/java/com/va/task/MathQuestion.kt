@@ -2,7 +2,7 @@ package com.va.task
 
 import java.io.Serializable
 import java.lang.ArithmeticException
-
+// TODO: 5/5/2021 Documentation
 class MathQuestion(var list: IntArray, var operator: Operator, var delayTime: Long =0):
     Serializable {
 

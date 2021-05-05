@@ -11,11 +11,16 @@ import com.va.task.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+// TODO: 5/5/2021 Documentation, move logic to viewModel and test
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private var inputs: ArrayList<Int> = arrayListOf()
+
     private var operation = Operator.ADDITION
+
     private var operationSymbols = " + "
+
     private lateinit var mBinding: ActivityMainBinding
 
     @Inject
