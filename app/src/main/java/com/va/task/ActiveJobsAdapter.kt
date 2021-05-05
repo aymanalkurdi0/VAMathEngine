@@ -1,3 +1,8 @@
+/*
+ * Created by Ayman Alkurdi on 5/5/21 3:57 AM
+ * Copyright (c) 2021 . All rights reserved.
+ */
+
 package com.va.task
 
 import android.view.LayoutInflater
@@ -7,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkInfo
 import com.va.task.databinding.ItemActiveJobBinding
 import javax.inject.Inject
+
 // TODO: 5/5/2021 Documentation
 class ActiveJobsAdapter @Inject constructor() :
     RecyclerView.Adapter<ActiveJobsAdapter.ViewHolder>() {
@@ -48,12 +54,13 @@ class ActiveJobsAdapter @Inject constructor() :
 
         fun bind(bean: WorkInfo) {
             mBinding.tvId.text = bean.id.toString()
-            mBinding.tvState.text =  bean.state.name
-            if(bean.state.ordinal == 2){
-                mBinding.llState.visibility=View.VISIBLE
-                mBinding.tvResult.text = bean.outputData.getDouble(Constants.kResult, 0.0).toString()
-            }else{
-                mBinding.llState.visibility=View.GONE
+            mBinding.tvState.text = bean.state.name
+            if (bean.state.ordinal == 2) {
+                mBinding.llState.visibility = View.VISIBLE
+                mBinding.tvResult.text =
+                    bean.outputData.getDouble(Constants.kResult, 0.0).toString()
+            } else {
+                mBinding.llState.visibility = View.GONE
             }
 
         }
