@@ -80,15 +80,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     1 -> {
                         operation = Operator.SUBTRACTION
-                        operationSymbols = " / "
+                        operationSymbols = " - "
                     }
                     2 -> {
                         operation = Operator.MULTIPLICATION
-                        operationSymbols = " * "
+                        operationSymbols = " × "
                     }
                     3 -> {
                         operation = Operator.DIVISION
-                        operationSymbols = " / "
+                        operationSymbols = " ÷ "
 
                     }
                 }
