@@ -10,5 +10,12 @@
     <string name="function">Function</string>
     <string name="add">Add</string>
     <string name="clear">Clear</string>
+    <string name="addition">Addition</string>
+    <string name="subtraction">Subtraction</string>
+    <string name="multiplication">Multiplication</string>
+    <string name="division">Division</string>
+    <string name="calculate">Calculate</string>
+    <string name="input_delay">Required delay eg: 5s</string>
+    <string name="error_input_should_be_more_then">Please add some numbers to be calculated !!!</string>
 
 </resources>

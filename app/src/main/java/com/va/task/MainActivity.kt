@@ -2,16 +2,20 @@ package com.va.task
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
+import com.google.android.material.tabs.TabLayout
 import com.va.task.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private var inputs: ArrayList<String> = arrayListOf()
+    private var inputs: ArrayList<Int> = arrayListOf()
+    private var operation = Operator.ADDITION
+    private var operationSymbols = " + "
     private lateinit var mBinding: ActivityMainBinding
 
     @Inject
@@ -24,40 +28,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        mBinding.btnAdd.setOnClickListener {
-            inputs.add(mBinding.etNumbers.text.toString())
-            mBinding.etNumbers.text.clear()
-            updateFun()
-        }
 
-        mBinding.btnClear.setOnClickListener {
-            mBinding.etNumbers.text.clear()
-            mBinding.tvFun.text = ""
-            inputs.clear()
-        }
+        initialListeners()
 
-        mBinding.rvActiveJobs.adapter = activeJobsAdapter
-
-        mBinding.rvCompletedJobs.adapter = completedJobsAdapter
-
-        val math = MathQuestion(
-            intArrayOf(1, 2, 3), Operator.ADDITION, 15
-        )
-
-        createAJob(math)
-
-    }
-
-    private fun updateFun() {
-        val string = StringBuilder()
-
-        inputs.forEachIndexed { index, s ->
-            if (index != 0)
-                string.append(" / ")
-            string.append(s)
-
-        }
-        mBinding.tvFun.text = string
+        setupRvAdapters()
 
     }
 
@@ -65,16 +39,6 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         //Start Listening on works
         startListener()
-    }
-
-
-    private fun createAJob(data: MathQuestion) {
-
-        val intent = Intent(this, MathEngineService::class.java)
-
-        intent.putExtra(Constants.kMathQuestion, data)
-
-        MathEngineService.enqueueWork(this, intent)
     }
 
     private fun startListener() {
@@ -100,6 +64,108 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    private fun setupRvAdapters() {
+        mBinding.rvActiveJobs.adapter = activeJobsAdapter
+        mBinding.rvCompletedJobs.adapter = completedJobsAdapter
+    }
+
+    private fun initialListeners() {
+
+        mBinding.tlOperation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        operation = Operator.ADDITION
+                        operationSymbols = " + "
+                    }
+                    1 -> {
+                        operation = Operator.SUBTRACTION
+                        operationSymbols = " / "
+                    }
+                    2 -> {
+                        operation = Operator.MULTIPLICATION
+                        operationSymbols = " * "
+                    }
+                    3 -> {
+                        operation = Operator.DIVISION
+                        operationSymbols = " / "
+
+                    }
+                }
+                updateFun()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+
+        mBinding.btnAdd.setOnClickListener {
+            inputs.add(mBinding.etNumbers.text.toString().toInt())
+            mBinding.etNumbers.text.clear()
+            updateFun()
+        }
+
+        mBinding.btnClear.setOnClickListener {
+            clearInputs()
+        }
+
+        mBinding.btnCalculate.setOnClickListener {
+
+            if (inputs.size < 2) {
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.error_input_should_be_more_then),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+            var delay: Long = 0
+
+            if (mBinding.etDelay.text.isNotEmpty())
+                delay = mBinding.etDelay.text.toString().toLong()
+
+            val math = MathQuestion(
+                inputs.toIntArray(), operation, delay
+            )
+
+            createAJob(math)
+
+//            clearInputs()
+        }
+    }
+
+    private fun clearInputs() {
+        mBinding.etNumbers.text.clear()
+        mBinding.tvFun.text = ""
+        inputs.clear()
+    }
+
+    private fun updateFun() {
+        val string = StringBuilder()
+
+        inputs.forEachIndexed { index, s ->
+            if (index != 0)
+                string.append(operationSymbols)
+            string.append(s)
+
+        }
+        mBinding.tvFun.text = string
+
+    }
+
+    private fun createAJob(data: MathQuestion) {
+
+        val intent = Intent(this, MathEngineService::class.java)
+
+        intent.putExtra(Constants.kMathQuestion, data)
+
+        MathEngineService.enqueueWork(this, intent)
+
+        MathEngineService.enqueueWork(this, intent)
+    }
 
     override fun onStop() {
 
@@ -112,6 +178,5 @@ class MainActivity : AppCompatActivity() {
 
         super.onStop()
     }
-
 
 }

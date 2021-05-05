@@ -13,7 +13,6 @@ import kotlin.random.Random
 class MathEngineService : JobIntentService() {
 
 
-    // This method is called when service starts instead of onHandleIntent
     override fun onHandleWork(intent: Intent) {
         // We have received work to do.  The system or framework is already
         // holding a wake lock for us at this point, so we can just go.
@@ -51,14 +50,12 @@ class MathEngineService : JobIntentService() {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
     // convenient method for starting the service.
     companion object {
+        private const val jobId = 1
         fun enqueueWork(context: Context, intent: Intent) {
-            enqueueWork(context, MathEngineService::class.java, Random.nextInt(), intent)
+            enqueueWork(context, MathEngineService::class.java, jobId, intent)
         }
     }
 
