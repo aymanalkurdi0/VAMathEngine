@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Ayman Alkurdi on 5/5/21 3:59 AM
   ~ Copyright (c) 2021 . All rights reserved.
   -->
@@ -126,20 +125,21 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
 
             <EditText
                 android:id="@+id/et_delay"
-                android:maxEms="5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_delay"
                 android:inputType="numberDecimal"
+                android:maxLength="5"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/btn_calculate"
             android:layout_width="match_parent"
